@@ -1,0 +1,59 @@
+
+  <link rel="stylesheet" href="/styles/userlogin.css" />
+  <div class="login-main">
+    <div class="login-box">
+      <h1 class="insta-logo">register</h1>
+     <input type="text" id="message" value="{{{message}}}" name="message" hidden>
+      <form method="POST" action="/user/register">
+        <input id="email" type="text" name="email" placeholder="Enter phone number or email"  />
+        <input id="password"  type="password" name="password" placeholder="New Password"  />
+        <input id="confirmPassword"  type="password" name="confirmPassword" placeholder="Confirm Password"  />
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
+   
+    <div class="signup-box">
+      <p>Have an account? <a href="/user/login">Log in</a></p>
+    </div>
+  </div>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelector('form').addEventListener('submit', formValidate)
+});
+
+ const message = document.getElementById('message').value;
+    if(message){
+      console.log(message)
+       alert(message)
+    }
+
+ function formValidate(e){
+    
+    e.preventDefault();
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var confirmPassword = document.getElementById('confirmPassword').value;
+
+    if(email === "" || password === "" || confirmPassword === ""){
+     alert('all fields are required!')
+      return false; //prevent form submission
+    }else if( password !== confirmPassword ){ // incase of different passwords
+      alert('passwords do not match!')
+      return false;
+    }
+    e.target.submit();
+    return true;
+  }
+
+
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+      window.location.reload();
+    }
+  });
+
+</script>

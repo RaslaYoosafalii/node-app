@@ -1,0 +1,120 @@
+
+
+
+<link rel="stylesheet" href="/styles/dashboard.css">
+  <div class="container">
+    <header>
+      <h1>Admin Dashboard</h1>
+      <a href="/admin/logout" class="logout-btn">Logout</a>
+    </header>
+
+    <section class="user-table">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>User management</h2>
+     <a href="#" onclick="event.preventDefault(); openAddUserModal();" class="add-user-btn">Add User</a>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Email</th>
+            <th></th> 
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+            <tr>
+             <td>{{inc @index}}</td>
+             <td>{{this.email}}</td>
+             <td style="text-align: right;">
+                <button class="action-btn edit-btn" onclick="openEditModal('{{this._id}}', '{{this.email}}')">Edit</button>
+             <button class="action-btn delete-btn" onclick="deleteUser('{{this._id}}')">Delete</button>
+             </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+<!-- Add User Modal -->
+<div id="addUserModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeAddUserModal()">&times;</span>
+    <h2>Add User</h2>
+
+    <form id="addUserForm" method="POST" action="/admin/add-user">
+      <div>
+        <label for="addEmail">Email:</label><br>
+        <input type="email" id="addEmail" name="email" required>
+      </div>
+
+      <div>
+        <label for="addPassword">Password:</label><br>
+        <input type="password" id="addPassword" name="password" required>
+      </div>
+
+      <button type="submit" class="modal-btn">Add User</button>
+    </form>
+  </div>
+</div>
+<!-- Edit User Modal -->
+<div id="editUserModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeEditUserModal()">&times;</span>
+    <h2>Edit User</h2>
+
+    <form id="editUserForm" method="POST" action="/admin/edit-user">
+     <!-- Hidden user ID -->
+   <input type="hidden" id="editUserId" name="userId">
+      <div>
+        <label for="editEmail">Email:</label><br>
+        <input type="email" id="editEmail" name="email" required>
+      </div>
+
+      <div>
+        <label for="editPassword">Password:</label><br>
+        <input type="password" id="editPassword" name="password" required>
+      </div>
+
+      <button type="submit" class="modal-btn">Update</button>
+    </form>
+  </div>
+</div>
+
+<script>
+//open and close add user
+function openAddUserModal() {
+  document.getElementById('addUserModal').style.display = 'block';
+}
+function closeAddUserModal() {
+  document.getElementById('addUserModal').style.display = 'none';
+}
+
+//open and close edit 
+function openEditModal(userId, email) {
+  document.getElementById('editUserId').value = userId;
+  document.getElementById('editEmail').value = email;
+  document.getElementById('editPassword').value = '';
+  document.getElementById('editUserModal').style.display = 'block';
+}
+function closeEditUserModal() {
+  document.getElementById('editUserModal').style.display = 'none';
+}
+
+
+//delete user
+  function deleteUser(userId) {
+    if (confirm("Are you sure you want to delete this user?")) {
+      window.location.href = `/admin/delete-user/${userId}`;
+    }
+  }
+
+//force reload
+  // If page was loaded via back/forward cache, reload it from server
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted || performance.getEntriesByType("navigation")[0]?.type === "back_forward") {
+      window.location.reload();
+    }
+  });
+
+</script>
